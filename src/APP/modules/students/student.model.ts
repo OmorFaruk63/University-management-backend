@@ -5,6 +5,8 @@ import {
   TStudent,
   TUserName,
 } from "./student.interface";
+import bcrypt from "bcrypt";
+import config from "../../config";
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -79,6 +81,10 @@ const studentSchema = new Schema<TStudent>(
       type: String,
       required: [true, "ID is required"],
       unique: true,
+    },
+    password: {
+      type: String,
+      require: true,
     },
     // user: {
     //   type: Schema.Types.ObjectId,
@@ -165,15 +171,28 @@ const studentSchema = new Schema<TStudent>(
 //   next();
 // });
 
-// studentSchema.pre("findOne", function (next) {
-//   this.find({ isDeleted: { $ne: true } });
-//   next();
-// });
+studentSchema.pre("save", async function (next) {
+  const password = this.password;
+  this.password = await bcrypt.hash(password, Number(config.saltRounds));
 
-// studentSchema.pre("aggregate", function (next) {
-//   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-//   next();
-// });
+  next();
+});
+
+studentSchema.post("save", async function (doc, next) {
+  doc.password = "";
+
+  next();
+});
+
+studentSchema.pre("find", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+studentSchema.pre("findOne", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
 
 //creating a custom static method
 studentSchema.statics.isUserExists = async function (id: string) {

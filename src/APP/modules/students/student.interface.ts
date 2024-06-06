@@ -24,6 +24,7 @@ export type TLocalGuardian = {
 
 export type TStudent = {
   id: string;
+  password: string;
   user: Types.ObjectId;
   name: TUserName;
   gender: "male" | "female" | "other";
@@ -42,8 +43,6 @@ export type TStudent = {
   isDeleted: boolean;
 };
 
-
 export interface StudentModel extends Model<TStudent> {
   isUserExists(id: string): Promise<TStudent | null>;
 }
-

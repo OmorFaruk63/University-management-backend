@@ -4,9 +4,10 @@ import { StudentControllers } from "./student.controller";
 const router = express.Router();
 
 router.post("/create-student", StudentControllers.createStudent);
-// router.get("/", StudentControllers.getAllStudents);
 
-// router.get("/:studentId", StudentControllers.getSingleStudent);
+router.get("/", StudentControllers.getAllStudents);
+
+router.get("/:studentId", StudentControllers.getSingleStudent);
 
 // router.patch(
 //   "/:studentId",
@@ -14,6 +15,6 @@ router.post("/create-student", StudentControllers.createStudent);
 //   StudentControllers.updateStudent
 // );
 
-// router.delete("/:studentId", StudentControllers.deleteStudent);
+router.delete("/:studentId", StudentControllers.deleteStudent);
 
 export const StudentRoutes = router;
