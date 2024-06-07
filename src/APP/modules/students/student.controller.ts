@@ -1,26 +1,27 @@
 import { Request, RequestHandler, Response } from "express";
 import { StudentServices } from "./student.service";
 
-const createStudent = async (req: Request, res: Response) => {
-  try {
-    const student = req.body;
-    const result = await StudentServices.createStudentFromDB(student);
+// const createStudent = async (req: Request, res: Response) => {
+//   try {
+//     const student = req.body;
+//     const result = await StudentServices.createStudentFromDB(student);
 
-    res.send({
-      statusCode: 200,
-      success: true,
-      message: "Student Create succesfully",
-      data: result,
-    });
-  } catch (error) {
-    res.send({
-      statusCode: 500,
-      success: false,
-      message: "Student Create Failed",
-      error,
-    });
-  }
-};
+//     res.send({
+//       statusCode: 200,
+//       success: true,
+//       message: "Student Create succesfully",
+//       data: result,
+//     });
+//   } catch (error) {
+//     res.send({
+//       statusCode: 500,
+//       success: false,
+//       message: "Student Create Failed",
+//       error,
+//     });
+//   }
+// };
+
 const getSingleStudent: RequestHandler = async (req, res) => {
   const { studentId } = req.params;
   try {
@@ -94,7 +95,7 @@ const deleteStudent: RequestHandler = async (req, res) => {
 };
 
 export const StudentControllers = {
-  createStudent,
+  // createStudent,
   getAllStudents,
   deleteStudent,
   getSingleStudent,

@@ -1,10 +1,10 @@
 import { TStudent } from "./student.interface";
 import { Student } from "./student.model";
 
-const createStudentFromDB = async (student: TStudent) => {
-  const result = await Student.create(student);
-  return result;
-};
+// const createStudentFromDB = async (student: TStudent) => {
+//   const result = await Student.create(student);
+//   return result;
+// };
 
 const getAllStudentsFromDB = async () => {
   const result = await Student.find({});
@@ -12,7 +12,8 @@ const getAllStudentsFromDB = async () => {
 };
 
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await Student.findOne({ id });
+  // const result = await Student.findOne({ id });
+  const result = await Student.aggregate([{ $match: { id } }]);
   return result;
 };
 
@@ -56,7 +57,7 @@ const deleteStudentFromDB = async (id: string) => {
 };
 
 export const StudentServices = {
-  createStudentFromDB,
+  // createStudentFromDB,
   getAllStudentsFromDB,
   deleteStudentFromDB,
   getSingleStudentFromDB,

@@ -86,12 +86,12 @@ const studentSchema = new Schema<TStudent>(
       type: String,
       require: true,
     },
-    // user: {
-    //   type: Schema.Types.ObjectId,
-    //   required: [true, "User id is required"],
-    //   unique: true,
-    //   ref: "User",
-    // },
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, "User id is required"],
+      unique: true,
+      ref: "User",
+    },
     name: {
       type: userNameSchema,
       required: [true, "Name is required"],
@@ -151,19 +151,18 @@ const studentSchema = new Schema<TStudent>(
       type: Schema.Types.ObjectId,
       ref: "AcademicDepartment",
     },
+  },
+  {
+    toJSON: {
+      virtuals: true,
+    },
   }
-
-  // {
-  //   toJSON: {
-  //     virtuals: true,
-  //   },
-  // }
 );
 
-// //virtual
-// studentSchema.virtual("fullName").get(function () {
-//   return this?.name?.firstName + this?.name?.middleName + this?.name?.lastName;
-// });
+//virtual
+studentSchema.virtual("fullName").get(function () {
+  return this?.name?.firstName + this?.name?.middleName + this?.name?.lastName;
+});
 
 // // Query Middleware
 // studentSchema.pre("find", function (next) {
@@ -191,6 +190,11 @@ studentSchema.pre("find", function (next) {
 
 studentSchema.pre("findOne", function (next) {
   this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+studentSchema.pre("aggregate", function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
 });
 
