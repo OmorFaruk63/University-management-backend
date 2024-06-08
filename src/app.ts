@@ -3,6 +3,8 @@ import cors from "cors";
 
 import { UserRoutes } from "./APP/modules/user/user.route";
 import { StudentRoutes } from "./APP/modules/students/student.route";
+import globalErrorHandler from "./APP/middlewares/globalErrorhandler";
+import notFound from "./APP/middlewares/notFound";
 const app: Application = express();
 
 app.use(express.json());
@@ -15,4 +17,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
+app.use(globalErrorHandler);
+app.use(notFound);
 export default app;

@@ -23,12 +23,13 @@ const createStudent = async (
       data: result,
     });
   } catch (err) {
-    res.send({
-      statusCode: 500,
-      success: false,
-      message: "Student is created Failed",
-      err,
-    });
+    next(err);
+    // res.send({
+    //   statusCode: 500,
+    //   success: false,
+    //   message: "Student is created Failed",
+    //   err,
+    // });
   }
 };
 
