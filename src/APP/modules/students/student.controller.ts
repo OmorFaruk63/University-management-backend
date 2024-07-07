@@ -1,5 +1,7 @@
 import { Request, RequestHandler, Response } from "express";
 import { StudentServices } from "./student.service";
+import sendResponse from "../../utils/sendResponse";
+import httpStatus from "http-status";
 
 // const createStudent = async (req: Request, res: Response) => {
 //   try {
@@ -61,18 +63,18 @@ const getAllStudents: RequestHandler = async (req, res) => {
   }
 };
 
-// const updateStudent = catchAsync(async (req, res) => {
-//   const { studentId } = req.params;
-//   const { student } = req.body;
-//   const result = await StudentServices.updateStudentIntoDB(studentId, student);
+const updateStudent: RequestHandler = async (req, res) => {
+  const { studentId } = req.params;
+  const { student } = req.body;
+  const result = await StudentServices.updateStudentIntoDB(studentId, student);
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Student is updated succesfully",
-//     data: result,
-//   });
-// });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Student is updated succesfully",
+    data: result,
+  });
+};
 
 const deleteStudent: RequestHandler = async (req, res) => {
   try {

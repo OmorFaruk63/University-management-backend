@@ -1,38 +1,31 @@
-import { NextFunction, Request, Response } from "express";
-import { UserServices } from "./user.service";
+import { Request, Response } from "express";
+import userService from "./user.service";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
+import httpStatus from "http-status";
 
-const createStudent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { password, student: studentData } = req.body;
-
-    // const zodParsedData = studentValidationSchema.parse(studentData);
-
-    const result = await UserServices.createStudentIntoDB(
-      password,
-      studentData
-    );
-
-    res.send({
-      statusCode: 200,
-      success: true,
-      message: "Student is created succesfully",
-      data: result,
-    });
-  } catch (err) {
-    next(err);
-    // res.send({
-    //   statusCode: 500,
-    //   success: false,
-    //   message: "Student is created Failed",
-    //   err,
-    // });
-  }
+const createAdmin = catchAsync(async (req, res, next) => {
+  const adminData = req.body;
+  const createdAdminData = await userService.insertAdminInfoInDB(adminData);
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: "Admin created   successfully",
+    data: createdAdminData,
+  });
+});
+const createUser = catchAsync(async (req, res, next) => {
+  const userData = req.body;
+  const createUserData = await userService.insertUserInfoInDB(userData);
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: "User created   successfully",
+    data: createUserData,
+  });
+});
+const userController = {
+  createAdmin,
+  createUser,
 };
-
-export const UserControllers = {
-  createStudent,
-};
+export default userController;

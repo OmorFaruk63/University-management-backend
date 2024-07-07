@@ -1,22 +1,34 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+import router from "./app/routes/routes";
+// import notFound from "./app/middleware/notFoundHandler";
+// import globalErrorHandler from "./app/middleware/globalErrorHandler";
 
-import { UserRoutes } from "./APP/modules/user/user.route";
-import { StudentRoutes } from "./APP/modules/students/student.route";
-import globalErrorHandler from "./APP/middlewares/globalErrorhandler";
-import notFound from "./APP/middlewares/notFound";
+// Initialize dotenv to load environment variables
+dotenv.config();
+
 const app: Application = express();
 
+// Middleware to parse JSON bodies
 app.use(express.json());
-app.use(cors());
 
-app.use("/api/v1/student", StudentRoutes);
-app.use("/api/v1/users", UserRoutes);
+// Middleware to enable CORS with specific origins
+app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+// Application-level routes
+app.use("/api/v1", router);
+
+// Root route
+app.post("/", (req: Request, res: Response) => {
+  console.log(req.body.roomData);
+  res.send("Hello world");
 });
 
-app.use(globalErrorHandler);
-app.use(notFound);
+// Global error handler middleware (uncomment and implement if needed)
+// app.use(globalErrorHandler);
+
+// Not found handler middleware (uncomment and implement if needed)
+// app.use(notFound);
+
 export default app;
